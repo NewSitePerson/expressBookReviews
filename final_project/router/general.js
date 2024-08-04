@@ -14,7 +14,7 @@ public_users.post("/register", (req,res) => {
 public_users.get('/',function (req, res) {
 res.send(JSON.stringify(books.null.4));
 //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  //return res.status(300).json({message: "Yet to be implemented"});
 });
 
 // Get book details based on ISBN
