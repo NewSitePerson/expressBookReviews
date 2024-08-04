@@ -12,7 +12,7 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-'books'{
+'books': {
       "1": {"author": "Chinua Achebe","title": "Things Fall Apart", "reviews": {} },
       "2": {"author": "Hans Christian Andersen","title": "Fairy tales", "reviews": {} },
       "3": {"author": "Dante Alighieri","title": "The Divine Comedy", "reviews": {} },
