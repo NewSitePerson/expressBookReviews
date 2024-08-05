@@ -12,21 +12,24 @@ app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUni
 
 app.use("/customer/auth/*", function auth(req,res,next){
 //Write the authenication mechanism here
-let token = req.session.authorization['accessToken']; // Access Token
-        
-        jwt.verify(token, "access", (err, user) => {
-            if (!err) {
-                req.user = user; // Set authenticated user data on the request object
-                next(); // Proceed to the next middleware
-            } else {
-                return res.status(403).json({ message: "User not authenticated" }); // Return error if token verification fails
-            }
-        });
-        
-        // Return error if no access token is found in the session
-    } else {
-        return res.status(403).json({ message: "User not logged in" });
-    }
+const authHeader = req.headers.authorization;
+
+if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Unauthorized' });
+}
+
+const token = authHeader.split(' ')[1];
+
+try {
+    const decoded = jwt.verify(token, 'you secret key'); //Your own secret key to use
+    //Store user information in the request for later usage
+    req.user = decoded;
+    next();
+} catch (error) {
+    return res.status(401).json({ message: 'Unauthorized' });
+}
+
+});
 
 });
  
