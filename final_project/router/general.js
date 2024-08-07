@@ -37,70 +37,24 @@ res.send(JSON.stringify({books}, null, 2));
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
 const isbn = req.params.isbn;
-  
-  if (books.hasOwnProperty(isbn)) {
-    const bookDetails = books[isbn];
-    return res.json(bookDetails);
-  } else {
-    return res.status(404).json({ message: "Book not found" });
-  }
+    res.send(books[isbn])
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  const authorName = req.params.author;
-  const bookKeys = Object.keys(books);
-  const booksByAuthor = [];
-  
-  for (const key of bookKeys) {
-    if (books[key].author === authorName) {
-      booksByAuthor.push(books[key]);
-    }
-  }
-  
-  if (booksByAuthor.length > 0) {
-    return res.json(booksByAuthor);
-  } else {
-    return res.status(404).json({ message: "No books found by the provided author" });
-  }
+  const author = req.params.author;
+    res.send(books[author])
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-   const bookTitle = req.params.title; // Get the title from request parameters
-    const bookKeys = Object.keys(books); // Obtain all the keys for the 'books' object
-  
-    const booksByTitle = [];
-  
-    // Iterate through the 'books' array & check the title matches the one provided in the request parameters
-    for (const key of bookKeys) {
-      if (books[key].title === bookTitle) {
-        booksByTitle.push(books[key]);
-      }
-    }
-  
-    if (booksByTitle.length > 0) {
-      return res.status(200).json(booksByTitle);
-    } else {
-      return res.status(404).json({ message: "No books found with the provided title" });
-    }
+   const title = req.params.title;
+    res.send(books[title])
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  const isbn = req.params.isbn; // Get the ISBN from the request parameters
-  
-    if (books.hasOwnProperty(isbn)) {
-      const bookReviews = books[isbn].reviews;
-  
-      if (Object.keys(bookReviews).length > 0) {
-        return res.status(200).json(bookReviews);
-      } else {
-        return res.status(404).json({ message: "No reviews found for the provided ISBN" });
-      }
-    } else {
-      return res.status(404).json({ message: "Book not found" });
-    }
+    const reviews = books[isbnParam]["reviews"];
 });
 
 module.exports.general = public_users;
