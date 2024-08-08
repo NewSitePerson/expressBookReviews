@@ -18,21 +18,21 @@ let usersamename = users.filter((user)=>{
 }
 
 const authenticatedUser = (username,password)=>{ //returns boolean
-let validusers = users.filter((user)=>{
-    return (user.username === username && user.password === password)
-  });
-  if(validusers.length > 0){
-    return true;
-  } else {
-    return false;
-  }
+    let userwithsamename = users.filter((user)=>{
+        return user.username === username
+      });
+      if(userwithsamename.length > 0){
+        return true;
+      } else {
+        return false;
+      }
     //write code to check if username and password match the one we have in records.
 }
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
 const username = req.body.username;
-    const password = req.body.password;
+const password = req.body.password;
 
     if (!username || !password) {
         return res.status(404).json({message: "Error logging in"});
@@ -70,7 +70,20 @@ regd_users.post("/register", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-    
+    const isbn = req.params.isbn;
+    let filtered_book = books[isbn]
+    if (filtered_book) {
+        let review = req.query.review;
+        let reviewer = req.session.authorization['username'];
+        if(review) {
+            filtered_book['reviews'][reviewer] = review;
+            books[isbn] = filtered_book;
+        }
+        res.send(`The review for the book with ISBN  ${isbn} has been added/updated.`);
+    }
+    else{
+        res.send("Unable to find this ISBN!");
+    }
 });
 
 regd_users.delete("/auth/review/:isbn", async (req, res) => {
