@@ -10,23 +10,15 @@ public_users.post("/register", (req,res) => {
     const password = req.body.password;
   
     if (username && password) {
-      if (!doesExist(username)) { 
+      if (!isValid(username)) { 
         users.push({"username":username,"password":password});
-        return res.status(200).json({message: "User" +username+ "successfully registred. Now you can login"});
+        return res.status(200).json({message: "Customer successfully registred. Now you can login"});
       } else {
-        return res.status(404).json({message: "User" +username+ " already exists!"});    
+        return res.status(404).json({message: "Customer with same username already exists!"});    
       }
     } 
-    return res.status(404).json({message: "Unable to register user."});
-    // Assuming you have a function to hash passwords
-    const hashedPassword = hashPasswordFunction(password);
-  
-    // Store the new user in your 'users' object
-    users[username] = hashedPassword;
-  
-    return res.status(201).json({ message: "Registration successful" });
-  return res.status(300).json({message: "Yet to be implemented"});
-});
+    return res.status(404).json({message: "Unable to register customer."});
+  });
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
@@ -55,11 +47,8 @@ public_users.get('/title/:title',function (req, res) {
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-    const isbnParam = req.params.isbn;
-
-    // Get the book reviews based on ISBN provided in the request parameters
-
-    const reviews = books[isbnParam]["reviews"];
+    const isbn = req.params.isbn;
+  res.send(books[isbn]["reviews"])
 
     if (!reviews) {
 
