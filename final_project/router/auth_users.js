@@ -87,17 +87,16 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
 });
 
 regd_users.delete("/auth/review/:isbn", async (req, res) => {
-    //*Write your code here
- 
-     const isbn = req.params.isbn
-     const username = req.session.authorization.username
-     if (books[isbn]) {
-         let book = await books[isbn]
-         delete book.reviews[username]
-         return res.status(200).send("Review successfully deleted")
-     } else {
-         return res.status(404).json({message: "ISBN not found"})
-     }
+    const isbn = req.params.isbn;
+    let reviewer = req.session.authorization['username'];
+    let filtered_review = books[isbn]["reviews"];
+    if (filtered_review[reviewer]){
+        delete filtered_review[reviewer];
+        res.send(`Reviews for the ISBN  ${isbn} posted by the user ${reviewer} deleted.`);
+    }
+    else{
+        res.send("Can't delete, as this review has been posted by a different user");
+    }
  });
 
 module.exports.authenticated = regd_users;
